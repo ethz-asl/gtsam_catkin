@@ -4,7 +4,7 @@ project(gtsam_catkin)
 find_package(catkin_simple REQUIRED)
 catkin_simple(ALL_DEPS_REQUIRED)
 
-# Make sure that Eigen
+# Make sure that Eigen is the patched GTSAM version.
 find_package(eigen_catkin 0.0.301 EXACT)
 if( NOT eigen_catkin_FOUND )
 
@@ -29,7 +29,6 @@ ExternalProject_Add(gtsam_src
                           -DCMAKE_BUILD_TYPE=Release ../gtsam_src
   BUILD_COMMAND make
   INSTALL_COMMAND make install
-
 )
 
 add_dependencies(${PROJECT_NAME}_package gtsam_src)
