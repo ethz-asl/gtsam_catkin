@@ -11,6 +11,7 @@
   <buildtool_depend>catkin_simple</buildtool_depend>
 
   <depend>eigen_catkin</depend>
+  <depend>gtsam</depend>
 
 </package>
 
