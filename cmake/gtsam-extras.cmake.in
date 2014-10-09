@@ -1,4 +1,4 @@
-find_package(gtsam REQUIRED)
+find_package(gtsam_catkin REQUIRED)
 
 if( TARGET gtsam_unstable)
     set( @PROJECT_NAME@_LIBRARIES gtsam gtsam_unstable )
