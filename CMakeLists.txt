@@ -24,9 +24,10 @@ endif()
 
 
 # Check if the source version of GTSAM is available
-find_package(gtsam)
+find_package(gtsam CONFIG CONFIGS gtsamConfig.cmake GTSAMConfig.cmake)
 if(gtsam_FOUND)
-  message("+++ Found source version of GTSAM")
+  message("+++ Found source version of GTSAM (using ${GTSAM_INCLUDE_DIR})")
+  add_dependencies(${PROJECT_NAME}_package GTSAM)
 else()
   message("--- No source version of GTSAM found. Downloading.")
   include(ExternalProject)
