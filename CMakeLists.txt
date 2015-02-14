@@ -38,7 +38,7 @@ else()
 	PATCH_COMMAND cd ../gtsam_src/ && patch -N gtsam/nonlinear/LinearContainerFactor.h ${CMAKE_CURRENT_SOURCE_DIR}/LinearContainerFactor.patch
     CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX:PATH=${CATKIN_DEVEL_PREFIX} 
     -DCMAKE_BUILD_TYPE=Release ../gtsam_src
-    BUILD_COMMAND make
+	BUILD_COMMAND $(MAKE)
     INSTALL_COMMAND make install
     )
   add_dependencies(${PROJECT_NAME}_package gtsam_src)
