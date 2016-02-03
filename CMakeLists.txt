@@ -41,6 +41,7 @@ else()
     BUILD_COMMAND $(MAKE)
     INSTALL_COMMAND make install
     )
+  ExternalProject_CatkinInstall(gtsam_src)
   add_dependencies(${PROJECT_NAME}_package gtsam_src)
 endif()
 
