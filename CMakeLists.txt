@@ -33,14 +33,15 @@ else()
   include(ExternalProject)
   file(MAKE_DIRECTORY ${CATKIN_DEVEL_PREFIX}/include)
   ExternalProject_Add(gtsam_src
-    URL https://research.cc.gatech.edu/borg/sites/edu.borg/files/downloads/gtsam-3.1.0.tgz
+    URL https://research.cc.gatech.edu/borg/sites/edu.borg/files/downloads/gtsam-3.2.1.tgz
     UPDATE_COMMAND ""
-	PATCH_COMMAND cd ../gtsam_src/ && patch -N gtsam/nonlinear/LinearContainerFactor.h ${CMAKE_CURRENT_SOURCE_DIR}/LinearContainerFactor.patch
-    CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX:PATH=${CATKIN_DEVEL_PREFIX} 
-    -DCMAKE_BUILD_TYPE=Release ../gtsam_src
-    BUILD_COMMAND $(MAKE)
-    INSTALL_COMMAND make install
+    CMAKE_ARGS
+      -DCMAKE_INSTALL_PREFIX:PATH=${CATKIN_DEVEL_PREFIX} 
+      -DCMAKE_BUILD_TYPE=Release
+    BUILD_COMMAND ${CMAKE_COMMAND} --build ./ --target install
+    INSTALL_COMMAND ""
     )
+  ExternalProject_CatkinInstall(gtsam_src)
   add_dependencies(${PROJECT_NAME}_package gtsam_src)
 endif()
 
