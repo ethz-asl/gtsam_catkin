@@ -1,0 +1,26 @@
+diff --git a/gtsam/inference/Key.h b/gtsam/inference/Key.h
+index 2c3eb84c6..a0ba7beee 100644
+--- a/gtsam/inference/Key.h
++++ b/gtsam/inference/Key.h
+@@ -84,7 +84,7 @@ struct traits<Key> {
+   static void Print(const Key& val, const std::string& str = "") {
+     PrintKey(val, str);
+   }
+-  static bool Equals(const Key& val1, const Key& val2, double tol = 1e-8) {
++  static bool Equals(const Key& val1, const Key& val2, double /*tol*/ = 1e-8) {
+     return val1 == val2;
+   }
+ };
+diff --git a/gtsam/linear/NoiseModel.h b/gtsam/linear/NoiseModel.h
+index e495921c2..1806be7f0 100644
+--- a/gtsam/linear/NoiseModel.h
++++ b/gtsam/linear/NoiseModel.h
+@@ -676,7 +676,7 @@ namespace gtsam {
+          * evaluating the total penalty. But for now, I'm leaving this residual method as pure
+          * virtual, so the existing mEstimators can inherit this default fallback behavior.
+          */
+-        virtual double residual(double error) const { return 0; };
++        virtual double residual(double /*error*/) const { return 0; };
+ 
+         /*
+          * This method is responsible for returning the weight function for a given amount of error.
