@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>gtsam_catkin</name>
-  <version>0.0.1</version>
+  <version>4.0.0</version>
   <description>gtsam_catkin</description>
 
   <maintainer email="paul.furgale@mavt.ethz.ch">Paul Furgale</maintainer>
