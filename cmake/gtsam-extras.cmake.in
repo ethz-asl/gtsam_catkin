@@ -1,0 +1,7 @@
+find_package(GTSAM REQUIRED)
+
+if( TARGET gtsam_unstable)
+    set( @PROJECT_NAME@_LIBRARIES gtsam gtsam_unstable )
+else()
+    set( @PROJECT_NAME@_LIBRARIES gtsam )
+endif()
