@@ -1,35 +1,37 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 77434d135..ac37fd24b 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -294,10 +294,12 @@ endif()
- include_directories(BEFORE SYSTEM ${Boost_INCLUDE_DIR})
- 
- if(GTSAM_SUPPORT_NESTED_DISSECTION)
--  set(METIS_INCLUDE_DIRECTORIES
--    gtsam/3rdparty/metis/include
--    gtsam/3rdparty/metis/libmetis
--    gtsam/3rdparty/metis/GKlib)
-+  find_package(metis_catkin REQUIRED)
-+  set(METIS_INCLUDE_DIRECTORIES ${metis_catkin_INCLUDE_DIRS})
-+  set(METIS_LIBRARIES ${metis_catkin_LIBRARIES})
-+  message("metis catkin libs: ${metis_catkin_LIBRARIES}")
-+  add_library(metis SHARED IMPORTED)
-+  set_property(TARGET metis PROPERTY IMPORTED_LOCATION ${metis_catkin_LIBRARIES})
- else()
-   set(METIS_INCLUDE_DIRECTORIES)
- endif()
 diff --git a/gtsam/3rdparty/CMakeLists.txt b/gtsam/3rdparty/CMakeLists.txt
-index b890bc4af..d5def0bb3 100644
+index 9a99bdba8..7a4a197bd 100644
 --- a/gtsam/3rdparty/CMakeLists.txt
 +++ b/gtsam/3rdparty/CMakeLists.txt
-@@ -43,9 +43,6 @@ if(NOT GTSAM_USE_SYSTEM_EIGEN)
+@@ -27,9 +27,6 @@ if(NOT GTSAM_USE_SYSTEM_EIGEN)
  endif()
- 
+
  option(GTSAM_BUILD_METIS_EXECUTABLES "Build metis library executables" OFF)
 -if(GTSAM_SUPPORT_NESTED_DISSECTION)
 -	add_subdirectory(metis)
 -endif()
- 
+
  add_subdirectory(ceres)
- 
+
+diff --git a/gtsam/CMakeLists.txt b/gtsam/CMakeLists.txt
+index b4a33943e..44e7b3628 100644
+--- a/gtsam/CMakeLists.txt
++++ b/gtsam/CMakeLists.txt
+@@ -153,11 +153,15 @@ target_include_directories(gtsam BEFORE PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/CppUnitLite>
+ )
+ if(GTSAM_SUPPORT_NESTED_DISSECTION)
++  find_package(metis_catkin REQUIRED)
++  set(METIS_INCLUDE_DIRS ${metis_catkin_INCLUDE_DIRS})
++  set(METIS_LIBRARIES ${metis_catkin_LIBRARIES})
++  message("metis catkin include_dirs: ${METIS_INCLUDE_DIRS}")
++  add_library(metis SHARED IMPORTED)
++  set_property(TARGET metis PROPERTY IMPORTED_LOCATION ${metis_catkin_LIBRARIES})
+   target_include_directories(gtsam BEFORE PUBLIC
+-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/gtsam/3rdparty/metis/include>
+-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/gtsam/3rdparty/metis/libmetis>
+-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/gtsam/3rdparty/metis/GKlib>
+-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include/gtsam/3rdparty/metis/>
++    $<BUILD_INTERFACE:${METIS_INCLUDE_DIRS}>
++    $<INSTALL_INTERFACE:${METIS_INCLUDE_DIRS}>
+   )
+ endif()
