@@ -1,3 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 738a434f2..708fdb484 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -297,7 +297,7 @@ option(GTSAM_USE_SYSTEM_EIGEN "Find and use system-installed Eigen. If 'off', us
+ # Switch for using system Eigen or GTSAM-bundled Eigen
+ if(GTSAM_USE_SYSTEM_EIGEN)
+ 	find_package(Eigen3 REQUIRED)
+-
++  message("Eigen dirs: ${EIGEN3_INCLUDE_DIR}")
+ 	# Use generic Eigen include paths e.g. <Eigen/Core>
+ 	set(GTSAM_EIGEN_INCLUDE_FOR_INSTALL "${EIGEN3_INCLUDE_DIR}")
+  
 diff --git a/gtsam/3rdparty/CMakeLists.txt b/gtsam/3rdparty/CMakeLists.txt
 index 9a99bdba8..7a4a197bd 100644
 --- a/gtsam/3rdparty/CMakeLists.txt
