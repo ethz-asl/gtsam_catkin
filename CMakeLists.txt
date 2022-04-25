@@ -8,7 +8,7 @@ catkin_simple()
 include(ExternalProject)
 file(MAKE_DIRECTORY ${CATKIN_DEVEL_PREFIX}/include)
 ExternalProject_Add(gtsam_src
-  GIT_REPOSITORY git@github.com:borglab/gtsam.git
+  GIT_REPOSITORY https://github.com/borglab/gtsam.git
   CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX:PATH=${CATKIN_DEVEL_PREFIX} -DGTSAM_USE_SYSTEM_EIGEN=ON
   -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} ../gtsam_src
   BUILD_COMMAND make -j2
