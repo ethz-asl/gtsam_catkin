@@ -8,11 +8,7 @@ catkin_simple()
 include(ExternalProject)
 file(MAKE_DIRECTORY ${CATKIN_DEVEL_PREFIX}/include)
 ExternalProject_Add(gtsam_src
-  GIT_REPOSITORY https://bitbucket.org/gtborg/gtsam.git
-  GIT_TAG 6b6a8495bb9148a415d98708707c10656b0b69a1
-  UPDATE_COMMAND ""
-  PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/use_catkinized_metis.patch &&
-  patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/fix_warnings.patch
+  GIT_REPOSITORY git@github.com:borglab/gtsam.git
   CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX:PATH=${CATKIN_DEVEL_PREFIX} -DGTSAM_USE_SYSTEM_EIGEN=ON
   -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} ../gtsam_src
   BUILD_COMMAND make -j2
