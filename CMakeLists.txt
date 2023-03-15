@@ -1,43 +1,50 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(gtsam_catkin)
+cmake_minimum_required(VERSION 3.5)
+project(gtsam_vendor)
 
-find_package(catkin_simple REQUIRED)
-
-catkin_simple()
+find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+ament_add_default_options()
 
 include(ExternalProject)
-file(MAKE_DIRECTORY ${CATKIN_DEVEL_PREFIX}/include)
-ExternalProject_Add(gtsam_src
-  GIT_REPOSITORY https://bitbucket.org/gtborg/gtsam.git
-  GIT_TAG 6b6a8495bb9148a415d98708707c10656b0b69a1
+
+externalproject_add(gtsam
+  GIT_REPOSITORY https://github.com/borglab/gtsam.git
+  GIT_TAG 005c7d4e2debcfe72c89ac78ad68683ea4e71d5d
+  GIT_CONFIG advice.detachedHead=false
   UPDATE_COMMAND ""
-  PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/use_catkinized_metis.patch &&
-  patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/fix_warnings.patch
-  CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX:PATH=${CATKIN_DEVEL_PREFIX} -DGTSAM_USE_SYSTEM_EIGEN=ON
-  -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} ../gtsam_src
-  BUILD_COMMAND make -j2
-  INSTALL_COMMAND make install
+  CMAKE_ARGS  -DGTSAM_BUILD_PYTHON=ON
+              -DGTSAM_USE_SYSTEM_EIGEN=ON
+              -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_install
 )
 
-install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/CppUnitLite
-        DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
-        FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/gtsam
-        DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
-        FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/gtsam_unstable
-        DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
-        FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/include/wrap
-        DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
-        FILES_MATCHING PATTERN "*.h")
+externalproject_get_property(gtsam BINARY_DIR)
 
-install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/lib/
-        DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        FILES_MATCHING PATTERN "libCppUnitLite*")
-install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/lib/
-        DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        FILES_MATCHING PATTERN "libgtsam*")
+ament_python_install_package(gtsam)
+ament_export_include_directories(include)
+ament_export_libraries(gtsam gtsam_unstable)
 
-cs_export(INCLUDE_DIRS ${CATKIN_DEVEL_PREFIX}/include
-          LIBRARIES CppUnitLite gtsam gtsam_unstable metis tbb)
+install(
+  DIRECTORY
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_install/
+  DESTINATION
+    ${CMAKE_INSTALL_PREFIX}
+  USE_SOURCE_PERMISSIONS
+)
+
+install(
+  DIRECTORY
+    ${BINARY_DIR}/python/gtsam ${BINARY_DIR}/python/gtsam_unstable
+  DESTINATION
+    ${PYTHON_INSTALL_DIR}
+  USE_SOURCE_PERMISSIONS
+)
+
+# Testing
+if(BUILD_TESTING)
+  # Test linting
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+
+endif()
+
+ament_package()
