@@ -22,6 +22,7 @@ externalproject_get_property(gtsam BINARY_DIR)
 ament_python_install_package(gtsam)
 ament_export_include_directories(include)
 ament_export_libraries(gtsam gtsam_unstable)
+ament_export_dependencies(GTSAM)
 
 install(
   DIRECTORY
